@@ -182,7 +182,7 @@ export default function Chat({ onSwitchView }: ChatProps) {
             <div className="p-1.5 bg-primary/10 rounded-full">
               <Sparkles className="w-5 h-5 text-primary" />
             </div>
-            <h2 className="text-lg font-semibold font-headline">Clarity AI</h2>
+            <h2 className="text-lg font-semibold font-headline">Chat with AI</h2>
           </div>
           <ChatSettings />
       </header>
