@@ -49,7 +49,7 @@ export function CodeForge() {
 
   return (
     <div className="flex flex-col h-full gap-4">
-      <div className="flex items-center justify-center gap-1 flex-nowrap">
+      <div className="flex items-center justify-center gap-2 flex-wrap px-4">
         {capabilities.map(({ name, icon: Icon }) => (
           <Button
             key={name}
@@ -59,9 +59,9 @@ export function CodeForge() {
               setActiveView(name);
               setInitialData(null);
             }}
-            className="capitalize rounded-full px-2 text-[10px] h-6"
+            className="capitalize rounded-full px-3 text-xs h-7"
           >
-            <Icon className="w-3 h-3 mr-1" />
+            <Icon className="w-3.5 h-3.5 mr-1.5" />
             {name}
           </Button>
         ))}
