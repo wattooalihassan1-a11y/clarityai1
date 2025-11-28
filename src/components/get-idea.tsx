@@ -4,37 +4,36 @@ import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { generatePicture } from '@/app/actions';
+import { getIdea } from '@/app/actions';
 import { useToast } from '@/hooks/use-toast';
-import NextImage from 'next/image';
-import type { GeneratePictureOutput } from '@/ai/flows/generate-picture';
+import type { GetIdeaOutput } from '@/ai/flows/get-idea';
 
-interface ImagineProps {
-  initialData: { prompt: string } | null;
+interface GetIdeaProps {
+  initialData: { topic: string } | null;
   setInitialData: (data: any) => void;
 }
 
-export default function Imagine({ initialData, setInitialData }: ImagineProps) {
-  const [prompt, setPrompt] = useState('');
-  const [result, setResult] = useState<GeneratePictureOutput | null>(null);
+export default function GetIdea({ initialData, setInitialData }: GetIdeaProps) {
+  const [topic, setTopic] = useState('');
+  const [result, setResult] = useState<GetIdeaOutput | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
   const handleSubmit = async (e?: React.FormEvent) => {
     e?.preventDefault();
-    if (!prompt.trim()) return;
+    if (!topic.trim()) return;
 
     setIsLoading(true);
     setResult(null);
 
     try {
-      const res = await generatePicture({ prompt });
+      const res = await getIdea({ topic });
       setResult(res);
     } catch (error) {
       console.error(error);
       toast({
         title: "Error",
-        description: "Failed to generate image. Please try again.",
+        description: "Failed to generate ideas. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -43,8 +42,8 @@ export default function Imagine({ initialData, setInitialData }: ImagineProps) {
   };
 
   useEffect(() => {
-    if (initialData?.prompt) {
-      setPrompt(initialData.prompt);
+    if (initialData?.topic) {
+      setTopic(initialData.topic);
       handleSubmit();
       setInitialData(null);
     }
@@ -55,13 +54,13 @@ export default function Imagine({ initialData, setInitialData }: ImagineProps) {
     <div className="space-y-6">
       <form onSubmit={handleSubmit} className="flex gap-2">
         <Input
-          value={prompt}
-          onChange={(e) => setPrompt(e.target.value)}
-          placeholder="What do you want to imagine?"
+          value={topic}
+          onChange={(e) => setTopic(e.target.value)}
+          placeholder="What topic to brainstorm ideas for?"
           disabled={isLoading}
         />
         <Button type="submit" disabled={isLoading}>
-          {isLoading ? 'Imagining...' : 'Imagine'}
+          {isLoading ? 'Generating...' : 'Get Ideas'}
         </Button>
       </form>
 
@@ -69,7 +68,10 @@ export default function Imagine({ initialData, setInitialData }: ImagineProps) {
         <Card className="animate-pulse">
             <CardHeader><div className="h-6 w-1/3 bg-muted rounded"></div></CardHeader>
             <CardContent className="space-y-4">
-                <div className="aspect-square w-full bg-muted rounded-md"></div>
+                <div className="h-4 w-full bg-muted rounded"></div>
+                <div className="h-4 w-3/4 bg-muted rounded"></div>
+                <div className="h-4 w-full bg-muted rounded"></div>
+                <div className="h-4 w-4/5 bg-muted rounded"></div>
             </CardContent>
         </Card>
       )}
@@ -77,16 +79,14 @@ export default function Imagine({ initialData, setInitialData }: ImagineProps) {
       {result && (
         <Card>
           <CardHeader>
-            <CardTitle>Voilà!</CardTitle>
+            <CardTitle>Ideas for: {topic}</CardTitle>
           </CardHeader>
           <CardContent>
-            <NextImage 
-                src={result.imageUrl} 
-                alt={prompt} 
-                width={512} 
-                height={512} 
-                className="rounded-md mx-auto"
-            />
+            <ul className="list-disc list-inside space-y-2">
+                {result.ideas.map((idea, index) => (
+                    <li key={index} className="text-muted-foreground">{idea}</li>
+                ))}
+            </ul>
           </CardContent>
         </Card>
       )}

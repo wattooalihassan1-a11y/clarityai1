@@ -2,13 +2,13 @@
 
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Bookmark, MessageSquareQuote, Combine, Sparkles, Image } from 'lucide-react';
+import { Bookmark, MessageSquareQuote, Combine, Sparkles, Lightbulb } from 'lucide-react';
 
 import Chat from '@/components/chat';
 import HomeworkHelper from '@/components/homework-helper';
 import Explain from '@/components/explain';
 import Summarize from '@/components/summarize';
-import Imagine from '@/components/imagine';
+import GetIdea from '@/components/get-idea';
 
 import type { Capability } from '@/lib/types';
 
@@ -17,7 +17,7 @@ const capabilities: { name: Capability; icon: React.ElementType }[] = [
   { name: 'Study', icon: Bookmark },
   { name: 'Explain', icon: MessageSquareQuote },
   { name: 'Summarize', icon: Combine },
-  { name: 'Imagine', icon: Image },
+  { name: 'Get Idea', icon: Lightbulb },
 ];
 
 export function CodeForge() {
@@ -40,16 +40,16 @@ export function CodeForge() {
         return <Explain {...props} />;
       case 'Summarize':
         return <Summarize {...props} />;
-      case 'Imagine':
-        return <Imagine {...props} />;
+      case 'Get Idea':
+        return <GetIdea {...props} />;
       default:
         return <Chat onSwitchView={switchView} />;
     }
   };
 
   return (
-    <div className="flex flex-col h-full gap-4">
-      <div className="flex items-center justify-center gap-2 flex-wrap px-4">
+    <div className="h-full flex flex-col gap-4">
+      <div className="flex items-center justify-center gap-2 flex-wrap px-4 py-2">
         {capabilities.map(({ name, icon: Icon }) => (
           <Button
             key={name}
@@ -67,7 +67,7 @@ export function CodeForge() {
         ))}
       </div>
 
-      <div className="flex-grow">
+      <div className="flex-grow min-h-0">
         {renderActiveComponent()}
       </div>
     </div>
