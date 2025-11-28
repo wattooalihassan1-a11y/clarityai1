@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from 'react';
-import { Paperclip, Mic, Send, X, Settings, Sparkles } from 'lucide-react';
+import { Paperclip, Mic, Send, X, Settings, Sparkles, Pencil } from 'lucide-react';
 import Image from 'next/image';
 import { useChatHistory } from '@/hooks/use-chat-history';
 import { handleChatConversation, generatePicture } from '@/app/actions';
@@ -10,7 +10,9 @@ import { useToast } from '@/hooks/use-toast';
 import { ChatSettings } from '@/components/chat-settings';
 import { MarkdownRenderer } from './markdown-renderer';
 import { VoiceInput } from './voice-input';
-import type { Capability } from '@/lib/types';
+import type { Capability, Message } from '@/lib/types';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
+import { Textarea } from '@/components/ui/textarea';
 
 interface ChatProps {
   onSwitchView: (view: Capability, data: any) => void;
@@ -18,11 +20,13 @@ interface ChatProps {
 
 export default function Chat({ onSwitchView }: ChatProps) {
   const { toast } = useToast();
-  const { activeChat, addMessage, isLoaded } = useChatHistory();
+  const { activeChat, addMessage, isLoaded, editMessage } = useChatHistory();
   const [input, setInput] = useState('');
   const [image, setImage] = useState<string | null>(null);
   const [isRecording, setIsRecording] = useState(false);
   const [isSending, setIsSending] = useState(false);
+  const [editingMessage, setEditingMessage] = useState<Message | null>(null);
+  const [editedContent, setEditedContent] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -33,6 +37,12 @@ export default function Chat({ onSwitchView }: ChatProps) {
       scrollAreaRef.current.scrollTop = scrollAreaRef.current.scrollHeight;
     }
   }, [activeChat?.messages]);
+
+  useEffect(() => {
+    if (editingMessage) {
+      setEditedContent(editingMessage.content);
+    }
+  }, [editingMessage]);
   
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -56,11 +66,11 @@ export default function Chat({ onSwitchView }: ChatProps) {
       case '/summarize':
         onSwitchView('Summarize', { text: args });
         return true;
-      case '/idea':
-        onSwitchView('Get Idea', { topic: args });
-        return true;
       case '/imagine':
         handleImageGeneration(args);
+        return true;
+      case '/idea':
+        onSwitchView('Get Idea', { topic: args });
         return true;
       default:
         return false;
@@ -70,15 +80,15 @@ export default function Chat({ onSwitchView }: ChatProps) {
   const handleImageGeneration = async (prompt: string) => {
     if (!activeChat || !prompt) return;
     setIsSending(true);
-    addMessage(activeChat.id, { role: 'user', content: `/imagine ${prompt}` });
+    addMessage({ role: 'user', content: `/imagine ${prompt}` });
     try {
-      addMessage(activeChat.id, { role: 'assistant', content: 'Generating image...' });
+      addMessage({ role: 'assistant', content: 'Generating image...' });
       const result = await generatePicture({ prompt });
-      addMessage(activeChat.id, { role: 'assistant', content: `Here is your generated image for: "${prompt}"`, imageUrl: result.imageUrl });
+      addMessage({ role: 'assistant', content: `Here is your generated image for: "${prompt}"`, imageUrl: result.imageUrl });
     } catch (error) {
       console.error(error);
       toast({ title: "Image Generation Failed", description: "Could not generate the image.", variant: "destructive" });
-      addMessage(activeChat.id, { role: 'assistant', content: 'Sorry, I failed to generate the image.' });
+      addMessage({ role: 'assistant', content: 'Sorry, I failed to generate the image.' });
     } finally {
       setIsSending(false);
     }
@@ -119,7 +129,7 @@ export default function Chat({ onSwitchView }: ChatProps) {
           imagePayload = { url: imageToSend, contentType: 'image/png' };
       }
     }
-    addMessage(activeChat.id, { role: 'user', content: messageToSend, imageUrl: imageToSend });
+    addMessage({ role: 'user', content: messageToSend, imageUrl: imageToSend });
 
     try {
       const result = await handleChatConversation({
@@ -129,11 +139,11 @@ export default function Chat({ onSwitchView }: ChatProps) {
         persona: activeChat.persona,
         language: activeChat.language,
       });
-      addMessage(activeChat.id, { role: 'assistant', content: result.response });
+      addMessage({ role: 'assistant', content: result.response });
     } catch (error) {
       console.error(error);
       toast({ title: "An error occurred", description: "Failed to get a response from the AI.", variant: "destructive" });
-      addMessage(activeChat.id, { role: 'assistant', content: 'Sorry, something went wrong.' });
+      addMessage({ role: 'assistant', content: 'Sorry, something went wrong.' });
     } finally {
       setIsSending(false);
     }
@@ -149,6 +159,14 @@ export default function Chat({ onSwitchView }: ChatProps) {
   const handleVoiceSubmit = (transcript: string) => {
     setInput(prev => prev ? `${prev} ${transcript}` : transcript);
     setIsRecording(false);
+  };
+
+  const handleSaveEdit = () => {
+    if (editingMessage && activeChat) {
+      editMessage(activeChat.id, editingMessage.id, editedContent);
+      setEditingMessage(null);
+      setEditedContent('');
+    }
   };
 
   return (
@@ -172,8 +190,13 @@ export default function Chat({ onSwitchView }: ChatProps) {
               </div>
             </div>
           )}
-          {activeChat?.messages.map((message, index) => (
-            <div key={index} className={`flex items-start gap-3 ${message.role === 'user' ? 'justify-end' : ''}`}>
+          {activeChat?.messages.map((message) => (
+            <div key={message.id} className={`group flex items-start gap-3 ${message.role === 'user' ? 'justify-end' : ''}`}>
+              {message.role === 'user' && (
+                <Button variant="ghost" size="icon" className="w-8 h-8 opacity-0 group-hover:opacity-100 transition-opacity" onClick={() => setEditingMessage(message)}>
+                  <Pencil className="w-4 h-4" />
+                </Button>
+              )}
               <div className={`p-3 rounded-lg max-w-md ${message.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-muted'}`}>
                   {message.imageUrl && (
                     <div className="mb-2">
@@ -235,6 +258,22 @@ export default function Chat({ onSwitchView }: ChatProps) {
           )}
         </div>
       </div>
+      <Dialog open={!!editingMessage} onOpenChange={(isOpen) => !isOpen && setEditingMessage(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Edit Message</DialogTitle>
+          </DialogHeader>
+          <Textarea
+            value={editedContent}
+            onChange={(e) => setEditedContent(e.target.value)}
+            className="min-h-[150px]"
+          />
+          <DialogFooter>
+            <Button variant="ghost" onClick={() => setEditingMessage(null)}>Cancel</Button>
+            <Button onClick={handleSaveEdit}>Save Changes</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from 'react';
-import type { Chat, Message } from '@/lib/types';
+import type { Chat, Message, NewMessage } from '@/lib/types';
 import { DEFAULT_LANGUAGE, DEFAULT_PERSONA } from '@/lib/constants';
 import { useToast } from './use-toast';
 
@@ -70,9 +70,12 @@ export function useChatHistory() {
     }
   }, [chats, toast]);
 
-  const addMessage = useCallback((chatId: string, message: Message) => {
+  const addMessage = useCallback((newMessage: NewMessage) => {
+    if (!activeChatId) return;
+    const message: Message = { ...newMessage, id: crypto.randomUUID() };
+
     setChats(prev => {
-      const chatIndex = prev.findIndex(chat => chat.id === chatId);
+      const chatIndex = prev.findIndex(chat => chat.id === activeChatId);
       if (chatIndex === -1) return prev;
 
       const updatedChat = { ...prev[chatIndex] };
@@ -92,6 +95,20 @@ export function useChatHistory() {
 
       return newChats;
     });
+  }, [activeChatId]);
+  
+  const editMessage = useCallback((chatId: string, messageId: string, newContent: string) => {
+    setChats(prev => prev.map(chat => {
+      if (chat.id === chatId) {
+        return {
+          ...chat,
+          messages: chat.messages.map(message =>
+            message.id === messageId ? { ...message, content: newContent } : message
+          ),
+        };
+      }
+      return chat;
+    }));
   }, []);
 
   const updateChatSettings = useCallback((chatId: string, settings: { persona?: string, language?: string }) => {
@@ -111,6 +128,7 @@ export function useChatHistory() {
     deleteChat,
     loadChat,
     addMessage,
+    editMessage,
     updateChatSettings,
   };
 }
