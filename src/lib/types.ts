@@ -13,5 +13,5 @@ export type Message = {
     language: string;
   };
   
-  export type Capability = 'Solve' | 'Study' | 'Explain' | 'Summarize' | 'Get Idea';
+  export type Capability = 'Solve' | 'Study' | 'Explain' | 'Summarize' | 'Imagine';
   

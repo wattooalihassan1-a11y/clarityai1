@@ -2,13 +2,13 @@
 
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Bookmark, MessageSquareQuote, Combine, Brain, Sparkles } from 'lucide-react';
+import { Bookmark, MessageSquareQuote, Combine, Sparkles, Image } from 'lucide-react';
 
 import Chat from '@/components/chat';
 import HomeworkHelper from '@/components/homework-helper';
 import Explain from '@/components/explain';
 import Summarize from '@/components/summarize';
-import GetIdea from '@/components/get-idea';
+import Imagine from '@/components/imagine';
 
 import type { Capability } from '@/lib/types';
 
@@ -17,7 +17,7 @@ const capabilities: { name: Capability; icon: React.ElementType }[] = [
   { name: 'Study', icon: Bookmark },
   { name: 'Explain', icon: MessageSquareQuote },
   { name: 'Summarize', icon: Combine },
-  { name: 'Get Idea', icon: Brain },
+  { name: 'Imagine', icon: Image },
 ];
 
 export function CodeForge() {
@@ -40,8 +40,8 @@ export function CodeForge() {
         return <Explain {...props} />;
       case 'Summarize':
         return <Summarize {...props} />;
-      case 'Get Idea':
-        return <GetIdea {...props} />;
+      case 'Imagine':
+        return <Imagine {...props} />;
       default:
         return <Chat onSwitchView={switchView} />;
     }
