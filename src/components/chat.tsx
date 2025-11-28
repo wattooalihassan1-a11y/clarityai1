@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from 'react';
-import { Paperclip, Mic, Send, Settings, Sparkles } from 'lucide-react';
+import { Paperclip, Mic, Send, X } from 'lucide-react';
 import Image from 'next/image';
 import { useChatHistory } from '@/hooks/use-chat-history';
 import { handleChatConversation, generatePicture } from '@/app/actions';
@@ -13,7 +13,8 @@ import { ChatSettings } from '@/components/chat-settings';
 import { MarkdownRenderer } from './markdown-renderer';
 import { VoiceInput } from './voice-input';
 import type { Capability } from '@/lib/types';
-import { Avatar, AvatarFallback } from './ui/avatar';
+import { Avatar, AvatarImage, AvatarFallback } from './ui/avatar';
+
 
 interface ChatProps {
   onSwitchView: (view: Capability, data: any) => void;
@@ -150,11 +151,14 @@ export default function Chat({ onSwitchView }: ChatProps) {
   };
 
   return (
-    <Card className="flex flex-col h-[calc(100vh-14rem)] shadow-lg">
-      <CardHeader className="flex flex-row items-center justify-between">
+    <Card className="flex flex-col h-[calc(100vh-14rem)] shadow-none border-0">
+      <CardHeader className="flex flex-row items-center justify-between pb-2">
           <div className="flex items-center gap-3">
-            <Sparkles className="w-6 h-6 text-primary"/>
-            <CardTitle className="text-xl">Chat with AI</CardTitle>
+            <Avatar>
+              <AvatarImage src="/clarity-ai-logo.svg" alt="Clarity AI" />
+              <AvatarFallback>AI</AvatarFallback>
+            </Avatar>
+            <CardTitle className="text-xl font-bold font-headline">Clarity AI</CardTitle>
           </div>
           <ChatSettings />
       </CardHeader>
@@ -163,14 +167,24 @@ export default function Chat({ onSwitchView }: ChatProps) {
           <div className="p-4 space-y-6">
             {!isLoaded && <p className="text-center text-muted-foreground">Loading chat...</p>}
             {isLoaded && (!activeChat || activeChat.messages.length === 0) && (
-              <div className="flex justify-start">
-                  <div className="p-4 rounded-lg bg-muted max-w-md">
-                    <p className="text-sm">Hello! How can I help you today?</p>
-                  </div>
+               <div className="flex items-start gap-3">
+                <Avatar>
+                  <AvatarImage src="/clarity-ai-logo.svg" alt="Clarity AI" />
+                  <AvatarFallback>AI</AvatarFallback>
+                </Avatar>
+                <div className="p-4 rounded-lg bg-muted max-w-md">
+                  <p className="text-sm">Hello! I am Clarity AI, your intelligent, multi-purpose AI assistant. How can I help you today?</p>
+                </div>
               </div>
             )}
             {activeChat?.messages.map((message, index) => (
-              <div key={index} className={`flex items-end gap-2 ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+              <div key={index} className={`flex items-start gap-3 ${message.role === 'user' ? 'justify-end' : ''}`}>
+                 {message.role === 'assistant' && (
+                   <Avatar>
+                     <AvatarImage src="/clarity-ai-logo.svg" alt="Clarity AI" />
+                     <AvatarFallback>AI</AvatarFallback>
+                   </Avatar>
+                 )}
                 <div className={`p-4 rounded-lg max-w-md ${message.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-muted'}`}>
                     {message.imageUrl && (
                       <div className="mb-2">
@@ -179,10 +193,20 @@ export default function Chat({ onSwitchView }: ChatProps) {
                     )}
                     <MarkdownRenderer content={message.content} />
                   </div>
+                  {message.role === 'user' && (
+                   <Avatar>
+                     <AvatarImage src="" alt="User" />
+                     <AvatarFallback>U</AvatarFallback>
+                   </Avatar>
+                 )}
               </div>
             ))}
             {isSending && (
-               <div className="flex items-end gap-2 justify-start">
+               <div className="flex items-start gap-3">
+                  <Avatar>
+                     <AvatarImage src="/clarity-ai-logo.svg" alt="Clarity AI" />
+                     <AvatarFallback>AI</AvatarFallback>
+                   </Avatar>
                   <div className="p-4 rounded-lg bg-muted">
                     <div className="flex items-center gap-2">
                       <div className="w-2 h-2 rounded-full bg-muted-foreground animate-pulse delay-0"></div>
@@ -196,7 +220,7 @@ export default function Chat({ onSwitchView }: ChatProps) {
         </ScrollArea>
       </CardContent>
 
-      <div className="p-4 border-t">
+      <div className="p-4 border-t-0">
         {image && (
           <div className="relative mb-2 w-fit">
             <Image src={image} alt="Preview" width={80} height={80} className="rounded-md" />
@@ -229,7 +253,7 @@ export default function Chat({ onSwitchView }: ChatProps) {
             />
             <div className="absolute flex items-center gap-1 right-2 top-1/2 -translate-y-1/2">
               <Button variant="ghost" size="icon" onClick={() => setIsRecording(true)}><Mic className="w-5 h-5 text-muted-foreground" /></Button>
-              <Button onClick={handleSendMessage} disabled={isSending} size="icon" className="rounded-full w-9 h-9"><Send className="w-5 h-5" /></Button>
+              <Button onClick={handleSendMessage} disabled={isSending} size="icon" className="rounded-full w-9 h-9 bg-black text-white hover:bg-black/80"><Send className="w-5 h-5" /></Button>
             </div>
           </div>
         )}
@@ -237,3 +261,5 @@ export default function Chat({ onSwitchView }: ChatProps) {
     </Card>
   );
 }
+
+    
