@@ -1,13 +1,12 @@
 "use client";
 
-import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { Paperclip, Mic, Send, Settings, Trash2, X } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { Paperclip, Mic, Send, Settings, Sparkles } from 'lucide-react';
 import Image from 'next/image';
 import { useChatHistory } from '@/hooks/use-chat-history';
 import { handleChatConversation, generatePicture } from '@/app/actions';
 import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useToast } from '@/hooks/use-toast';
 import { ChatSettings } from '@/components/chat-settings';
@@ -151,57 +150,58 @@ export default function Chat({ onSwitchView }: ChatProps) {
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-14rem)]">
-      <div className="flex-grow">
-        <ScrollArea className="h-full" ref={scrollAreaRef}>
-          <div className="p-4 space-y-4">
+    <Card className="flex flex-col h-[calc(100vh-14rem)] shadow-lg">
+      <CardHeader className="flex flex-row items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Sparkles className="w-6 h-6 text-primary"/>
+            <CardTitle className="text-xl">Chat with AI</CardTitle>
+          </div>
+          <ChatSettings />
+      </CardHeader>
+      <CardContent className="flex-grow p-0 flex flex-col">
+        <ScrollArea className="flex-grow" ref={scrollAreaRef}>
+          <div className="p-4 space-y-6">
             {!isLoaded && <p className="text-center text-muted-foreground">Loading chat...</p>}
             {isLoaded && (!activeChat || activeChat.messages.length === 0) && (
-              <div className="text-center text-muted-foreground">
-                <p>Start a conversation with Clarity AI.</p>
-                <p className="text-sm">Use slash commands like /study, /explain, /summarize, /idea, or /imagine.</p>
+              <div className="flex justify-start">
+                  <div className="p-4 rounded-lg bg-muted max-w-md">
+                    <p className="text-sm">Hello! How can I help you today?</p>
+                  </div>
               </div>
             )}
             {activeChat?.messages.map((message, index) => (
               <div key={index} className={`flex items-end gap-2 ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                {message.role === 'assistant' && <Avatar className="w-8 h-8"><AvatarFallback>AI</AvatarFallback></Avatar>}
-                <Card className={`max-w-xl ${message.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-muted'}`}>
-                  <CardContent className="p-3">
+                <div className={`p-4 rounded-lg max-w-md ${message.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-muted'}`}>
                     {message.imageUrl && (
                       <div className="mb-2">
                         <Image src={message.imageUrl} alt="Uploaded content" width={300} height={300} className="rounded-md" />
                       </div>
                     )}
                     <MarkdownRenderer content={message.content} />
-                  </CardContent>
-                </Card>
-                {message.role === 'user' && <Avatar className="w-8 h-8"><AvatarFallback>U</AvatarFallback></Avatar>}
+                  </div>
               </div>
             ))}
             {isSending && (
                <div className="flex items-end gap-2 justify-start">
-                  <Avatar className="w-8 h-8"><AvatarFallback>AI</AvatarFallback></Avatar>
-                  <Card className="max-w-xl bg-muted">
-                    <CardContent className="p-3">
-                      <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full bg-muted-foreground animate-pulse delay-0"></div>
-                        <div className="w-2 h-2 rounded-full bg-muted-foreground animate-pulse delay-150"></div>
-                        <div className="w-2 h-2 rounded-full bg-muted-foreground animate-pulse delay-300"></div>
-                      </div>
-                    </CardContent>
-                  </Card>
+                  <div className="p-4 rounded-lg bg-muted">
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 rounded-full bg-muted-foreground animate-pulse delay-0"></div>
+                      <div className="w-2 h-2 rounded-full bg-muted-foreground animate-pulse delay-150"></div>
+                      <div className="w-2 h-2 rounded-full bg-muted-foreground animate-pulse delay-300"></div>
+                    </div>
+                  </div>
                 </div>
             )}
           </div>
         </ScrollArea>
-      </div>
+      </CardContent>
 
       <div className="p-4 border-t">
         {image && (
           <div className="relative mb-2 w-fit">
             <Image src={image} alt="Preview" width={80} height={80} className="rounded-md" />
-            <Button variant="ghost" size="icon" className="absolute top-0 right-0 w-6 h-6 bg-background/50" onClick={() => setImage(null)}>
-              <Trash2 className="w-4 h-4" />
+            <Button variant="ghost" size="icon" className="absolute -top-2 -right-2 w-6 h-6 bg-background rounded-full" onClick={() => setImage(null)}>
+              <X className="w-4 h-4" />
             </Button>
           </div>
         )}
@@ -210,29 +210,30 @@ export default function Chat({ onSwitchView }: ChatProps) {
           <VoiceInput onStopRecording={setIsRecording} onSubmit={handleVoiceSubmit} />
         ) : (
           <div className="relative">
-            <Textarea
+            <div className="absolute left-3 top-1/2 -translate-y-1/2">
+                <input type="file" ref={fileInputRef} onChange={handleImageUpload} accept="image/*" className="hidden" />
+                <Button variant="ghost" size="icon" onClick={() => fileInputRef.current?.click()}><Paperclip className="w-5 h-5 text-muted-foreground" /></Button>
+            </div>
+            <textarea
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder="Type a message or use / to see commands..."
-              className="pr-32 resize-none"
+              placeholder="Message Clarity AI..."
+              className="w-full resize-none rounded-full border bg-muted py-3 pl-12 pr-24"
               rows={1}
               onInput={(e) => {
                 const target = e.target as HTMLTextAreaElement;
                 target.style.height = 'auto';
-                target.style.height = `${target.scrollHeight}px`;
+                target.style.height = `${Math.min(target.scrollHeight, 120)}px`;
               }}
             />
-            <div className="absolute flex items-center gap-1 bottom-2 right-2">
-              <input type="file" ref={fileInputRef} onChange={handleImageUpload} accept="image/*" className="hidden" />
-              <Button variant="ghost" size="icon" onClick={() => fileInputRef.current?.click()}><Paperclip className="w-5 h-5" /></Button>
-              <Button variant="ghost" size="icon" onClick={() => setIsRecording(true)}><Mic className="w-5 h-5" /></Button>
-              <Button onClick={handleSendMessage} disabled={isSending}><Send className="w-5 h-5" /></Button>
-              <ChatSettings />
+            <div className="absolute flex items-center gap-1 right-2 top-1/2 -translate-y-1/2">
+              <Button variant="ghost" size="icon" onClick={() => setIsRecording(true)}><Mic className="w-5 h-5 text-muted-foreground" /></Button>
+              <Button onClick={handleSendMessage} disabled={isSending} size="icon" className="rounded-full w-9 h-9"><Send className="w-5 h-5" /></Button>
             </div>
           </div>
         )}
       </div>
-    </div>
+    </Card>
   );
 }

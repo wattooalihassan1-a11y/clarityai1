@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Brain, Bookmark, MessageSquareQuote, Combine, Sparkles } from 'lucide-react';
+import { Sparkles, Bookmark, MessageSquareQuote, Combine, Brain } from 'lucide-react';
 
 import Chat from '@/components/chat';
 import HomeworkHelper from '@/components/homework-helper';
@@ -48,7 +48,7 @@ export function CodeForge() {
   };
 
   return (
-    <div className="flex flex-col h-full gap-4">
+    <div className="flex flex-col h-full gap-6">
       <div className="flex items-center justify-center gap-2 flex-wrap">
         {capabilities.map(({ name, icon: Icon }) => (
           <Button
@@ -58,7 +58,7 @@ export function CodeForge() {
               setActiveView(name);
               setInitialData(null); // Clear initial data when manually switching tabs
             }}
-            className="capitalize"
+            className="capitalize rounded-full px-5"
           >
             <Icon className="w-4 h-4 mr-2" />
             {name}
@@ -66,7 +66,7 @@ export function CodeForge() {
         ))}
       </div>
 
-      <div className="flex-grow mt-4">
+      <div className="flex-grow">
         {renderActiveComponent()}
       </div>
     </div>
