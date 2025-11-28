@@ -19,29 +19,29 @@ export function PrivacyPolicy() {
             <p><strong>Last Updated:</strong> {new Date().toLocaleDateString()}</p>
             <p>
                 Thank you for using Clarity AI, an intelligent AI assistant developed by NextGenDeveloper Ali Hassan.
-                Your privacy is important to us, and this policy explains how your data is collected, used, and protected in accordance with Google Play Developer Policies, GDPR, and global privacy standards.
+                Your privacy is important to us, and this policy explains how your data is collected, used, and protected in accordance with <strong>Google Play Developer Policies, GDPR, and global privacy standards</strong>.
             </p>
             
             <h3>1. Information We Collect</h3>
             <h4>1.1 User-Provided Data</h4>
             <p>We may collect the following information when you interact with our app:</p>
             <ul>
-                <li>Text you type in the chat</li>
-                <li>Uploaded images (only when you choose to send them)</li>
-                <li>Voice input (converted into text inside the app)</li>
+                <li><strong>Text you type</strong> in the chat</li>
+                <li><strong>Uploaded images</strong> (only when you choose to send them)</li>
+                <li><strong>Voice input</strong> (converted into text inside the app)</li>
                 <li>Feedback and support messages</li>
             </ul>
 
             <h4>1.2 Automatically Collected Data</h4>
             <p>To improve performance and security, the app may collect:</p>
             <ul>
-                <li>Device information (device model, OS version)</li>
-                <li>Log data (crash reports, app performance)</li>
-                <li>Usage statistics (feature usage, interactions)</li>
+                <li><strong>Device information</strong> (device model, OS version)</li>
+                <li><strong>Log data</strong> (crash reports, app performance)</li>
+                <li><strong>Usage statistics</strong> (feature usage, interactions)</li>
             </ul>
 
             <h4>1.3 No Sensitive or Personal Identity Data</h4>
-            <p>We do not collect:</p>
+            <p>We <strong>do not collect</strong>:</p>
             <ul>
                 <li>Phone number</li>
                 <li>Contacts</li>
@@ -50,7 +50,7 @@ export function PrivacyPolicy() {
                 <li>Financial information</li>
                 <li>Government IDs</li>
             </ul>
-            <p>Your identity always remains anonymous.</p>
+            <p>Your identity always remains <strong>anonymous</strong>.</p>
             
             <h3>2. How We Use Your Information</h3>
             <p>Your data is used only for:</p>
@@ -60,14 +60,14 @@ export function PrivacyPolicy() {
                 <li>Fixing bugs and enhancing app performance</li>
                 <li>Keeping the app secure and stable</li>
             </ul>
-            <p>We do NOT sell or share your data with any third party for advertising or marketing.</p>
+            <p>We <strong>do NOT sell or share</strong> your data with any third party for advertising or marketing.</p>
             
             <h3>3. Data Storage & Security</h3>
             <ul>
-                <li>All chat data is stored locally on your device, unless you choose to clear it.</li>
-                <li>No personal data is stored on our servers.</li>
-                <li>AI message processing is handled through secure APIs such as Google Gemini, OpenAI, or other providers you select.</li>
-                <li>Industry-standard encryption is used to protect communication.</li>
+                <li>All chat data is stored <strong>locally on your device</strong>, unless you choose to clear it.</li>
+                <li><strong>No personal data is stored on our servers</strong>.</li>
+                <li>AI message processing is handled through <strong>secure APIs</strong> such as Google Gemini, OpenAI, or other providers you select.</li>
+                <li><strong>Industry-standard encryption</strong> is used to protect communication.</li>
             </ul>
             
             <h3>4. Third-Party Services</h3>
@@ -83,20 +83,20 @@ export function PrivacyPolicy() {
                 <li>Firebase Crashlytics</li>
                 <li>OpenAI (if selected)</li>
             </ul>
-            <p>We do not allow any third party to access your personal identity.</p>
+            <p>We do not allow any third party to access your <strong>personal identity</strong>.</p>
 
             <h3>5. Children’s Privacy</h3>
-            <p>Clarity AI is not intended for children under 13.</p>
+            <p>Clarity AI is <strong>not intended for children under 13</strong>.</p>
             <p>We do not knowingly collect data from children.</p>
 
             <h3>6. Your Rights</h3>
             <p>You have the right to:</p>
             <ul>
-                <li>Delete your chat history anytime inside the app</li>
+                <li><strong>Delete your chat history</strong> anytime inside the app</li>
                 <li>Request deletion of any stored data</li>
                 <li>Disable permissions like microphone or storage</li>
                 <li>Stop using the app at any time</li>
-</ul>
+            </ul>
 
             <h3>7. Changes to This Privacy Policy</h3>
             <p>We may update this policy occasionally.</p>
