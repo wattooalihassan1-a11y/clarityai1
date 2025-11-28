@@ -17,8 +17,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        headline: ['Sora', 'sans-serif'],
-        body: ['Manrope', 'sans-serif'],
+        headline: ['Roboto', 'sans-serif'],
+        body: ['Roboto', 'sans-serif'],
         code: ['monospace'],
       },
       colors: {
