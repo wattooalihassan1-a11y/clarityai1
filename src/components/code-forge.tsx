@@ -59,9 +59,9 @@ export function CodeForge() {
               setActiveView(name);
               setInitialData(null);
             }}
-            className="capitalize rounded-full px-4 text-sm h-9 transition-all duration-300 ease-in-out shadow-sm hover:shadow-md"
+            className="capitalize rounded-full px-3 text-xs h-7 transition-all duration-300 ease-in-out shadow-sm hover:shadow-md"
           >
-            <Icon className="w-4 h-4 mr-2" />
+            <Icon className="w-3 h-3 mr-1" />
             {name}
           </Button>
         ))}
