@@ -20,9 +20,12 @@ const HandleChatConversationInputSchema = z.object({
   })).optional().describe('The chat history.'),
   persona: z.string().optional().describe('The persona of the AI.'),
   language: z.string().optional().describe('The language to use.'),
-  image: z.string().optional().describe(
-    "An image to accompany the message, as a data URI that must include a MIME type and use Base64 encoding. Expected format: 'data:<mimetype>;base64,<encoded_data>'."
-  ),
+  image: z.object({
+    url: z.string().describe(
+      "An image to accompany the message, as a data URI that must include a MIME type and use Base64 encoding. Expected format: 'data:<mimetype>;base64,<encoded_data>'."
+    ),
+    contentType: z.string().describe('The MIME type of the image.'),
+  }).optional(),
 });
 export type HandleChatConversationInput = z.infer<typeof HandleChatConversationInputSchema>;
 
@@ -41,18 +44,18 @@ const prompt = ai.definePrompt({
   output: {schema: HandleChatConversationOutputSchema},
   prompt: `You are an AI assistant. Your persona is {{{persona}}}. You are communicating in {{{language}}}.
 
-  {% if image %}
-  The user has provided an image: {{media url=image}}.
-  {% endif %}
+  {{#if image}}
+  The user has provided an image: {{media url=image.url contentType=image.contentType}}.
+  {{/if}}
 
   The user has sent the following message: {{{message}}}.
 
-  {% if chatHistory %}
+  {{#if chatHistory}}
   Here is the chat history:
   {{#each chatHistory}}
   {{this.role}}: {{this.content}}
   {{/each}}
-  {% endif %}
+  {{/if}}
 
   Respond to the user's message, taking into account the chat history, persona, language, and any attached images.
 `,

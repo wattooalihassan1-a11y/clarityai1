@@ -111,9 +111,19 @@ export default function Chat({ onSwitchView }: ChatProps) {
     addMessage(activeChat.id, { role: 'user', content: messageToSend, imageUrl: imageToSend });
 
     try {
+      let imagePayload;
+      if (imageToSend) {
+        const contentType = imageToSend.match(/^data:(.*);base64,/)?.[1];
+        if (contentType) {
+          imagePayload = { url: imageToSend, contentType };
+        } else {
+            console.warn("Could not determine content type from data URI.");
+        }
+      }
+
       const result = await handleChatConversation({
         message: messageToSend,
-        image: imageToSend || undefined,
+        image: imagePayload,
         chatHistory: activeChat.messages,
         persona: activeChat.persona,
         language: activeChat.language,
