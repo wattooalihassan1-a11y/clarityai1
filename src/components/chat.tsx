@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from 'react';
-import { Paperclip, Mic, Send, X, Settings, Sparkles, Pencil } from 'lucide-react';
+import { Paperclip, Mic, Send, X, Settings, Sparkles, Pencil, Copy } from 'lucide-react';
 import Image from 'next/image';
 import { useChatHistory } from '@/hooks/use-chat-history';
 import { handleChatConversation, generatePicture } from '@/app/actions';
@@ -169,6 +169,12 @@ export default function Chat({ onSwitchView }: ChatProps) {
     }
   };
 
+  const handleCopy = (content: string) => {
+    navigator.clipboard.writeText(content);
+    toast({ title: "Copied to clipboard!" });
+  };
+
+
   return (
     <div className="flex flex-col h-full bg-card rounded-2xl overflow-hidden">
       <header className="flex items-center justify-between p-3 border-b shrink-0">
@@ -192,9 +198,13 @@ export default function Chat({ onSwitchView }: ChatProps) {
           )}
           {activeChat?.messages.map((message) => (
             <div key={message.id} className={`group flex items-start gap-3 ${message.role === 'user' ? 'justify-end' : ''}`}>
-              {message.role === 'user' && (
+              {message.role === 'user' ? (
                 <Button variant="ghost" size="icon" className="w-8 h-8 opacity-0 group-hover:opacity-100 transition-opacity" onClick={() => setEditingMessage(message)}>
                   <Pencil className="w-4 h-4" />
+                </Button>
+              ) : (
+                <Button variant="ghost" size="icon" className="w-8 h-8 opacity-0 group-hover:opacity-100 transition-opacity" onClick={() => handleCopy(message.content)}>
+                  <Copy className="w-4 h-4" />
                 </Button>
               )}
               <div className={`p-3 rounded-lg max-w-md ${message.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-muted'}`}>
