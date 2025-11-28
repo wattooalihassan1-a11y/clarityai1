@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Sparkles, Bookmark, MessageSquareQuote, Combine, Brain } from 'lucide-react';
+import { Bookmark, MessageSquareQuote, Combine, Brain, Sparkles } from 'lucide-react';
 
 import Chat from '@/components/chat';
 import HomeworkHelper from '@/components/homework-helper';
@@ -48,17 +48,18 @@ export function CodeForge() {
   };
 
   return (
-    <div className="flex flex-col h-full gap-6">
+    <div className="flex flex-col h-full gap-4">
       <div className="flex items-center justify-center gap-2 flex-wrap">
         {capabilities.map(({ name, icon: Icon }) => (
           <Button
             key={name}
             variant={activeView === name ? 'default' : 'outline'}
+            size="sm"
             onClick={() => {
               setActiveView(name);
               setInitialData(null);
             }}
-            className="capitalize rounded-lg px-5"
+            className="capitalize rounded-full px-4"
           >
             <Icon className="w-4 h-4 mr-2" />
             {name}
