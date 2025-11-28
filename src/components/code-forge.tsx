@@ -49,7 +49,7 @@ export function CodeForge() {
 
   return (
     <div className="h-full flex flex-col">
-      <div className="flex items-center gap-2 flex-nowrap overflow-x-auto p-4">
+      <div className="flex items-center justify-center gap-2 flex-wrap p-4">
         {capabilities.map(({ name, icon: Icon }) => (
           <Button
             key={name}
