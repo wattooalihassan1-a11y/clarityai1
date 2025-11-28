@@ -13,55 +13,6 @@ export function useChatHistory() {
   const [activeChatId, setActiveChatId] = useState<string | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
 
-  useEffect(() => {
-    try {
-      const storedChats = localStorage.getItem(CHAT_HISTORY_KEY);
-      if (storedChats) {
-        const parsedChats = JSON.parse(storedChats);
-        setChats(parsedChats);
-        if (parsedChats.length > 0) {
-          setActiveChatId(parsedChats[0].id);
-        } else {
-          // If stored array is empty, create a new one
-          const newChat = createNewChat();
-          setChats([newChat]);
-          setActiveChatId(newChat.id);
-        }
-      } else {
-        // No chats in storage, create a default one
-        const newChat = createNewChat();
-        setChats([newChat]);
-        setActiveChatId(newChat.id);
-      }
-    } catch (error) {
-      console.error("Failed to load chat history from localStorage", error);
-      toast({
-        title: "Load Error",
-        description: "Could not load chat history. Starting a new session.",
-        variant: "destructive",
-      });
-      const newChat = createNewChat();
-      setChats([newChat]);
-      setActiveChatId(newChat.id);
-    }
-    setIsLoaded(true);
-  }, [toast]);
-
-  useEffect(() => {
-    if (isLoaded) {
-      try {
-        localStorage.setItem(CHAT_HISTORY_KEY, JSON.stringify(chats));
-      } catch (error) {
-        console.error("Failed to save chat history to localStorage", error);
-        toast({
-          title: "Save Error",
-          description: "Could not save chat history.",
-          variant: "destructive",
-        });
-      }
-    }
-  }, [chats, isLoaded, toast]);
-
   const createNewChat = (title = "New Chat"): Chat => {
     const newChat: Chat = {
       id: crypto.randomUUID(),
@@ -73,6 +24,14 @@ export function useChatHistory() {
     };
     return newChat;
   };
+
+  useEffect(() => {
+    // Start with a new chat every time
+    const newChat = createNewChat();
+    setChats([newChat]);
+    setActiveChatId(newChat.id);
+    setIsLoaded(true);
+  }, []);
 
   const createChat = useCallback(() => {
     const newChat = createNewChat();
