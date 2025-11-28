@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from 'react';
-import { Paperclip, Mic, Send, X, Settings, Sparkles } from 'lucide-react';
+import { Paperclip, Mic, Send, X, Settings, Sparkles, User, Bot } from 'lucide-react';
 import Image from 'next/image';
 import { useChatHistory } from '@/hooks/use-chat-history';
 import { handleChatConversation, generatePicture } from '@/app/actions';
@@ -27,6 +27,8 @@ export default function Chat({ onSwitchView }: ChatProps) {
   const [isSending, setIsSending] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
 
   useEffect(() => {
     if (scrollAreaRef.current) {
@@ -97,6 +99,9 @@ export default function Chat({ onSwitchView }: ChatProps) {
     
     setInput('');
     setImage(null);
+    if (textareaRef.current) {
+        textareaRef.current.style.height = 'auto';
+    }
 
     const [command, ...argsParts] = messageToSend.split(' ');
     const args = argsParts.join(' ');
@@ -113,7 +118,7 @@ export default function Chat({ onSwitchView }: ChatProps) {
       if (imageToSend) {
         const contentType = imageToSend.match(/^data:(.*);base64,/)?.[1];
         if (contentType) {
-          imagePayload = { url: imageToSend, contentType };
+          imagePayload = { url: imageToSend };
         } else {
             console.warn("Could not determine content type from data URI.");
         }
@@ -149,11 +154,13 @@ export default function Chat({ onSwitchView }: ChatProps) {
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-10rem)] shadow-lg border bg-card rounded-2xl">
-      <header className="flex items-center justify-between p-4 border-b">
+    <div className="flex flex-col h-[calc(100vh-10rem)] bg-card rounded-2xl overflow-hidden">
+      <header className="flex items-center justify-between p-3 border-b shrink-0">
           <div className="flex items-center gap-3">
-            <Sparkles className="w-6 h-6 text-primary" />
-            <h2 className="text-lg font-semibold font-headline">Chat with AI</h2>
+            <div className="p-1.5 bg-primary/10 rounded-full">
+              <Sparkles className="w-5 h-5 text-primary" />
+            </div>
+            <h2 className="text-lg font-semibold font-headline">Clarity AI</h2>
           </div>
           <ChatSettings />
       </header>
@@ -162,13 +169,21 @@ export default function Chat({ onSwitchView }: ChatProps) {
           {!isLoaded && <p className="text-center text-muted-foreground">Loading chat...</p>}
           {isLoaded && (!activeChat || activeChat.messages.length === 0) && (
               <div className="flex items-start gap-3">
-              <div className="p-4 rounded-lg bg-muted max-w-md">
+              <Avatar className="w-8 h-8 border">
+                <AvatarFallback><Bot className="w-4 h-4" /></AvatarFallback>
+              </Avatar>
+              <div className="p-3 rounded-lg bg-muted max-w-md">
                 <p className="text-sm">Hello! How can I help you today?</p>
               </div>
             </div>
           )}
           {activeChat?.messages.map((message, index) => (
             <div key={index} className={`flex items-start gap-3 ${message.role === 'user' ? 'justify-end' : ''}`}>
+               {message.role === 'assistant' && (
+                  <Avatar className="w-8 h-8 border">
+                      <AvatarFallback><Bot className="w-4 h-4" /></AvatarFallback>
+                  </Avatar>
+               )}
               <div className={`p-3 rounded-lg max-w-md ${message.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-muted'}`}>
                   {message.imageUrl && (
                     <div className="mb-2">
@@ -181,7 +196,10 @@ export default function Chat({ onSwitchView }: ChatProps) {
           ))}
           {isSending && (
               <div className="flex items-start gap-3">
-                <div className="p-4 rounded-lg bg-muted">
+                <Avatar className="w-8 h-8 border">
+                    <AvatarFallback><Bot className="w-4 h-4" /></AvatarFallback>
+                </Avatar>
+                <div className="p-3 rounded-lg bg-muted">
                   <div className="flex items-center gap-2">
                     <div className="w-2 h-2 rounded-full bg-muted-foreground animate-pulse delay-0"></div>
                     <div className="w-2 h-2 rounded-full bg-muted-foreground animate-pulse delay-150"></div>
@@ -193,7 +211,7 @@ export default function Chat({ onSwitchView }: ChatProps) {
         </div>
       </div>
 
-      <div className="p-4 border-t bg-background rounded-b-2xl">
+      <div className="p-3 border-t bg-background rounded-b-2xl shrink-0">
         {image && (
           <div className="relative mb-2 w-fit">
             <Image src={image} alt="Preview" width={80} height={80} className="rounded-md" />
@@ -208,11 +226,12 @@ export default function Chat({ onSwitchView }: ChatProps) {
         ) : (
           <div className="relative">
             <textarea
+              ref={textareaRef}
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder="Message Clarity AI..."
-              className="w-full resize-none rounded-full border bg-muted py-3 pl-12 pr-28"
+              className="w-full resize-none rounded-2xl border bg-muted py-3 pl-4 pr-32"
               rows={1}
               onInput={(e) => {
                 const target = e.target as HTMLTextAreaElement;
