@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Bookmark, MessageSquareQuote, Combine, Sparkles, Lightbulb } from 'lucide-react';
+import { MessageSquareQuote, Combine, Sparkles, Image, Lightbulb } from 'lucide-react';
 
 import Chat from '@/components/chat';
 import HomeworkHelper from '@/components/homework-helper';
@@ -14,7 +14,7 @@ import type { Capability } from '@/lib/types';
 
 const capabilities: { name: Capability; icon: React.ElementType }[] = [
   { name: 'Solve', icon: Sparkles },
-  { name: 'Study', icon: Bookmark },
+  { name: 'Study', icon: MessageSquareQuote },
   { name: 'Explain', icon: MessageSquareQuote },
   { name: 'Summarize', icon: Combine },
   { name: 'Get Idea', icon: Lightbulb },
@@ -49,7 +49,7 @@ export function CodeForge() {
 
   return (
     <div className="h-full flex flex-col gap-4">
-      <div className="flex items-center gap-2 flex-nowrap overflow-x-auto px-4 py-2">
+      <div className="flex items-center justify-center gap-2 flex-wrap px-4 py-2">
         {capabilities.map(({ name, icon: Icon }) => (
           <Button
             key={name}
@@ -59,9 +59,9 @@ export function CodeForge() {
               setActiveView(name);
               setInitialData(null);
             }}
-            className="capitalize rounded-full px-4 py-2 text-sm h-auto flex-shrink-0"
+            className="capitalize rounded-full px-3 text-xs h-7"
           >
-            <Icon className="w-4 h-4 mr-1.5" />
+            <Icon className="w-3 h-3 mr-1" />
             {name}
           </Button>
         ))}
