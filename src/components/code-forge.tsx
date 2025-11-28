@@ -48,20 +48,20 @@ export function CodeForge() {
   };
 
   return (
-    <div className="h-full flex flex-col gap-4">
-      <div className="flex items-center justify-center gap-2 flex-wrap px-4 py-2">
+    <div className="h-full flex flex-col">
+      <div className="flex items-center justify-center gap-2 flex-wrap p-4">
         {capabilities.map(({ name, icon: Icon }) => (
           <Button
             key={name}
-            variant={activeView === name ? 'default' : 'ghost'}
+            variant={activeView === name ? 'default' : 'outline'}
             size="sm"
             onClick={() => {
               setActiveView(name);
               setInitialData(null);
             }}
-            className="capitalize rounded-full px-3 text-xs h-7"
+            className="capitalize rounded-full px-4 text-sm h-9 transition-all duration-300 ease-in-out shadow-sm hover:shadow-md"
           >
-            <Icon className="w-3 h-3 mr-1" />
+            <Icon className="w-4 h-4 mr-2" />
             {name}
           </Button>
         ))}
