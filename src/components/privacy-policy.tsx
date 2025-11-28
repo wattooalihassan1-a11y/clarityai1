@@ -18,12 +18,12 @@ export function PrivacyPolicy() {
           <div className="px-6 prose prose-sm dark:prose-invert max-w-none">
             <p><strong>Last Updated:</strong> {new Date().toLocaleDateString()}</p>
             <p>
-                Thank you for using Clarity AI, an intelligent AI assistant developed by NextGenDeveloper Ali Hassan.
+                Thank you for using <strong>Clarity AI</strong>, an intelligent AI assistant developed by <strong>NextGenDeveloper Ali Hassan</strong>.
                 Your privacy is important to us, and this policy explains how your data is collected, used, and protected in accordance with <strong>Google Play Developer Policies, GDPR, and global privacy standards</strong>.
             </p>
             
-            <h3>1. Information We Collect</h3>
-            <h4>1.1 User-Provided Data</h4>
+            <h3><strong>1. Information We Collect</strong></h3>
+            <h4><strong>1.1 User-Provided Data</strong></h4>
             <p>We may collect the following information when you interact with our app:</p>
             <ul>
                 <li><strong>Text you type</strong> in the chat</li>
@@ -32,7 +32,7 @@ export function PrivacyPolicy() {
                 <li>Feedback and support messages</li>
             </ul>
 
-            <h4>1.2 Automatically Collected Data</h4>
+            <h4><strong>1.2 Automatically Collected Data</strong></h4>
             <p>To improve performance and security, the app may collect:</p>
             <ul>
                 <li><strong>Device information</strong> (device model, OS version)</li>
@@ -40,7 +40,7 @@ export function PrivacyPolicy() {
                 <li><strong>Usage statistics</strong> (feature usage, interactions)</li>
             </ul>
 
-            <h4>1.3 No Sensitive or Personal Identity Data</h4>
+            <h4><strong>1.3 No Sensitive or Personal Identity Data</strong></h4>
             <p>We <strong>do not collect</strong>:</p>
             <ul>
                 <li>Phone number</li>
@@ -52,17 +52,17 @@ export function PrivacyPolicy() {
             </ul>
             <p>Your identity always remains <strong>anonymous</strong>.</p>
             
-            <h3>2. How We Use Your Information</h3>
+            <h3><strong>2. How We Use Your Information</strong></h3>
             <p>Your data is used only for:</p>
             <ul>
-                <li>Generating AI responses</li>
+                <li>Generating <strong>AI responses</strong></li>
                 <li>Improving accuracy and quality of answers</li>
                 <li>Fixing bugs and enhancing app performance</li>
-                <li>Keeping the app secure and stable</li>
+                <li>Keeping the app <strong>secure and stable</strong></li>
             </ul>
             <p>We <strong>do NOT sell or share</strong> your data with any third party for advertising or marketing.</p>
             
-            <h3>3. Data Storage & Security</h3>
+            <h3><strong>3. Data Storage & Security</strong></h3>
             <ul>
                 <li>All chat data is stored <strong>locally on your device</strong>, unless you choose to clear it.</li>
                 <li><strong>No personal data is stored on our servers</strong>.</li>
@@ -70,12 +70,12 @@ export function PrivacyPolicy() {
                 <li><strong>Industry-standard encryption</strong> is used to protect communication.</li>
             </ul>
             
-            <h3>4. Third-Party Services</h3>
+            <h3><strong>4. Third-Party Services</strong></h3>
             <p>Clarity AI may use third-party APIs for:</p>
             <ul>
-                <li>AI responses</li>
-                <li>Voice-to-text</li>
-                <li>Crash analytics</li>
+                <li><strong>AI responses</strong></li>
+                <li><strong>Voice-to-text</strong></li>
+                <li><strong>Crash analytics</strong></li>
             </ul>
             <p>These services follow their own privacy policies. Common providers include:</p>
             <ul>
@@ -85,11 +85,11 @@ export function PrivacyPolicy() {
             </ul>
             <p>We do not allow any third party to access your <strong>personal identity</strong>.</p>
 
-            <h3>5. Children’s Privacy</h3>
+            <h3><strong>5. Children’s Privacy</strong></h3>
             <p>Clarity AI is <strong>not intended for children under 13</strong>.</p>
             <p>We do not knowingly collect data from children.</p>
 
-            <h3>6. Your Rights</h3>
+            <h3><strong>6. Your Rights</strong></h3>
             <p>You have the right to:</p>
             <ul>
                 <li><strong>Delete your chat history</strong> anytime inside the app</li>
@@ -98,14 +98,14 @@ export function PrivacyPolicy() {
                 <li>Stop using the app at any time</li>
             </ul>
 
-            <h3>7. Changes to This Privacy Policy</h3>
+            <h3><strong>7. Changes to This Privacy Policy</strong></h3>
             <p>We may update this policy occasionally.</p>
             <p>Changes will be posted within the app, and the “Last Updated” date will be revised.</p>
 
-            <h3>8. Contact Us</h3>
+            <h3><strong>8. Contact Us</strong></h3>
             <p>If you have any questions or concerns:</p>
-            <p>Developer: NextGenDeveloper Ali Hassan</p>
-            <p>Email: <a href="mailto:nextgendeveloperalihassan@gmail.com" className="text-primary underline">nextgendeveloperalihassan@gmail.com</a></p>
+            <p><strong>Developer:</strong> NextGenDeveloper Ali Hassan</p>
+            <p><strong>Email:</strong> <a href="mailto:nextgendeveloperalihassan@gmail.com" className="text-primary underline">nextgendeveloperalihassan@gmail.com</a></p>
           </div>
         </ScrollArea>
       </SheetContent>
