@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from 'react';
-import { Paperclip, Mic, Send, X, Settings, Sparkles, User, Bot } from 'lucide-react';
+import { Paperclip, Mic, Send, X, Settings, Sparkles, Bot } from 'lucide-react';
 import Image from 'next/image';
 import { useChatHistory } from '@/hooks/use-chat-history';
 import { handleChatConversation, generatePicture } from '@/app/actions';
@@ -11,7 +11,7 @@ import { ChatSettings } from '@/components/chat-settings';
 import { MarkdownRenderer } from './markdown-renderer';
 import { VoiceInput } from './voice-input';
 import type { Capability } from '@/lib/types';
-import { Avatar, AvatarImage, AvatarFallback } from './ui/avatar';
+import { Avatar, AvatarFallback } from './ui/avatar';
 
 
 interface ChatProps {
@@ -111,19 +111,19 @@ export default function Chat({ onSwitchView }: ChatProps) {
       return;
     }
 
+    let imagePayload;
+    if (imageToSend) {
+      const contentType = imageToSend.match(/^data:(.*);base64,/)?.[1];
+      if (contentType) {
+          imagePayload = { url: imageToSend, contentType };
+      } else {
+          console.warn("Could not determine content type from data URI.");
+          imagePayload = { url: imageToSend, contentType: 'image/png' };
+      }
+    }
     addMessage(activeChat.id, { role: 'user', content: messageToSend, imageUrl: imageToSend });
 
     try {
-      let imagePayload;
-      if (imageToSend) {
-        const contentType = imageToSend.match(/^data:(.*);base64,/)?.[1];
-        if (contentType) {
-          imagePayload = { url: imageToSend };
-        } else {
-            console.warn("Could not determine content type from data URI.");
-        }
-      }
-
       const result = await handleChatConversation({
         message: messageToSend,
         image: imagePayload,
@@ -164,8 +164,8 @@ export default function Chat({ onSwitchView }: ChatProps) {
           </div>
           <ChatSettings />
       </header>
-      <div ref={scrollAreaRef} className="flex-1 p-4 overflow-y-auto">
-        <div className="space-y-6">
+      <div ref={scrollAreaRef} className="flex-1 overflow-y-auto">
+        <div className="p-4 space-y-6">
           {!isLoaded && <p className="text-center text-muted-foreground">Loading chat...</p>}
           {isLoaded && (!activeChat || activeChat.messages.length === 0) && (
               <div className="flex items-start gap-3">
@@ -179,11 +179,6 @@ export default function Chat({ onSwitchView }: ChatProps) {
           )}
           {activeChat?.messages.map((message, index) => (
             <div key={index} className={`flex items-start gap-3 ${message.role === 'user' ? 'justify-end' : ''}`}>
-               {message.role === 'assistant' && (
-                  <Avatar className="w-8 h-8 border">
-                      <AvatarFallback><Bot className="w-4 h-4" /></AvatarFallback>
-                  </Avatar>
-               )}
               <div className={`p-3 rounded-lg max-w-md ${message.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-muted'}`}>
                   {message.imageUrl && (
                     <div className="mb-2">
