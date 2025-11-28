@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from 'react';
-import { Paperclip, Mic, Send, X, Settings, Sparkles, Bot } from 'lucide-react';
+import { Paperclip, Mic, Send, X, Settings, Sparkles } from 'lucide-react';
 import Image from 'next/image';
 import { useChatHistory } from '@/hooks/use-chat-history';
 import { handleChatConversation, generatePicture } from '@/app/actions';
@@ -11,8 +11,6 @@ import { ChatSettings } from '@/components/chat-settings';
 import { MarkdownRenderer } from './markdown-renderer';
 import { VoiceInput } from './voice-input';
 import type { Capability } from '@/lib/types';
-import { Avatar, AvatarFallback } from './ui/avatar';
-
 
 interface ChatProps {
   onSwitchView: (view: Capability, data: any) => void;
@@ -154,7 +152,7 @@ export default function Chat({ onSwitchView }: ChatProps) {
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-10rem)] bg-card rounded-2xl overflow-hidden">
+    <div className="flex flex-col h-full bg-card rounded-2xl overflow-hidden">
       <header className="flex items-center justify-between p-3 border-b shrink-0">
           <div className="flex items-center gap-3">
             <div className="p-1.5 bg-primary/10 rounded-full">
@@ -164,14 +162,11 @@ export default function Chat({ onSwitchView }: ChatProps) {
           </div>
           <ChatSettings />
       </header>
-      <div ref={scrollAreaRef} className="flex-1 overflow-y-auto">
-        <div className="p-4 space-y-6">
+      <div className="flex-1 flex flex-col">
+        <div ref={scrollAreaRef} className="flex-1 overflow-y-auto p-4 space-y-6">
           {!isLoaded && <p className="text-center text-muted-foreground">Loading chat...</p>}
           {isLoaded && (!activeChat || activeChat.messages.length === 0) && (
-              <div className="flex items-start gap-3">
-              <Avatar className="w-8 h-8 border">
-                <AvatarFallback><Bot className="w-4 h-4" /></AvatarFallback>
-              </Avatar>
+            <div className="flex items-start gap-3">
               <div className="p-3 rounded-lg bg-muted max-w-md">
                 <p className="text-sm">Hello! How can I help you today?</p>
               </div>
@@ -191,9 +186,6 @@ export default function Chat({ onSwitchView }: ChatProps) {
           ))}
           {isSending && (
               <div className="flex items-start gap-3">
-                <Avatar className="w-8 h-8 border">
-                    <AvatarFallback><Bot className="w-4 h-4" /></AvatarFallback>
-                </Avatar>
                 <div className="p-3 rounded-lg bg-muted">
                   <div className="flex items-center gap-2">
                     <div className="w-2 h-2 rounded-full bg-muted-foreground animate-pulse delay-0"></div>
@@ -204,44 +196,44 @@ export default function Chat({ onSwitchView }: ChatProps) {
               </div>
           )}
         </div>
-      </div>
 
-      <div className="p-3 border-t bg-background rounded-b-2xl shrink-0">
-        {image && (
-          <div className="relative mb-2 w-fit">
-            <Image src={image} alt="Preview" width={80} height={80} className="rounded-md" />
-            <Button variant="ghost" size="icon" className="absolute -top-2 -right-2 w-6 h-6 bg-background rounded-full" onClick={() => setImage(null)}>
-              <X className="w-4 h-4" />
-            </Button>
-          </div>
-        )}
-
-        {isRecording ? (
-          <VoiceInput onStopRecording={setIsRecording} onSubmit={handleVoiceSubmit} />
-        ) : (
-          <div className="relative">
-            <textarea
-              ref={textareaRef}
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={handleKeyDown}
-              placeholder="Message Clarity AI..."
-              className="w-full resize-none rounded-2xl border bg-muted py-3 pl-4 pr-32"
-              rows={1}
-              onInput={(e) => {
-                const target = e.target as HTMLTextAreaElement;
-                target.style.height = 'auto';
-                target.style.height = `${Math.min(target.scrollHeight, 120)}px`;
-              }}
-            />
-            <div className="absolute flex items-center gap-1 right-2 top-1/2 -translate-y-1/2">
-              <input type="file" ref={fileInputRef} onChange={handleImageUpload} accept="image/*" className="hidden" />
-              <Button variant="ghost" size="icon" className="rounded-full" onClick={() => fileInputRef.current?.click()}><Paperclip className="w-5 h-5 text-muted-foreground" /></Button>
-              <Button variant="ghost" size="icon" className="rounded-full" onClick={() => setIsRecording(true)}><Mic className="w-5 h-5 text-muted-foreground" /></Button>
-              <Button onClick={handleSendMessage} disabled={isSending} size="icon" className="rounded-full w-9 h-9 bg-primary text-primary-foreground hover:bg-primary/90"><Send className="w-5 h-5" /></Button>
+        <div className="p-3 border-t bg-background shrink-0">
+          {image && (
+            <div className="relative mb-2 w-fit">
+              <Image src={image} alt="Preview" width={80} height={80} className="rounded-md" />
+              <Button variant="ghost" size="icon" className="absolute -top-2 -right-2 w-6 h-6 bg-background rounded-full" onClick={() => setImage(null)}>
+                <X className="w-4 h-4" />
+              </Button>
             </div>
-          </div>
-        )}
+          )}
+
+          {isRecording ? (
+            <VoiceInput onStopRecording={setIsRecording} onSubmit={handleVoiceSubmit} />
+          ) : (
+            <div className="relative">
+              <textarea
+                ref={textareaRef}
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={handleKeyDown}
+                placeholder="Message Clarity AI..."
+                className="w-full resize-none rounded-2xl border bg-muted py-3 pl-4 pr-32"
+                rows={1}
+                onInput={(e) => {
+                  const target = e.target as HTMLTextAreaElement;
+                  target.style.height = 'auto';
+                  target.style.height = `${Math.min(target.scrollHeight, 120)}px`;
+                }}
+              />
+              <div className="absolute flex items-center gap-1 right-2 top-1/2 -translate-y-1/2">
+                <input type="file" ref={fileInputRef} onChange={handleImageUpload} accept="image/*" className="hidden" />
+                <Button variant="ghost" size="icon" className="rounded-full" onClick={() => fileInputRef.current?.click()}><Paperclip className="w-5 h-5 text-muted-foreground" /></Button>
+                <Button variant="ghost" size="icon" className="rounded-full" onClick={() => setIsRecording(true)}><Mic className="w-5 h-5 text-muted-foreground" /></Button>
+                <Button onClick={handleSendMessage} disabled={isSending} size="icon" className="rounded-full w-9 h-9 bg-primary text-primary-foreground hover:bg-primary/90"><Send className="w-5 h-5" /></Button>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
