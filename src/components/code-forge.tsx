@@ -49,7 +49,7 @@ export function CodeForge() {
 
   return (
     <div className="h-full flex flex-col">
-      <div className="flex items-center gap-2 flex-wrap p-4">
+      <div className="flex items-center gap-2 flex-nowrap overflow-x-auto p-4">
         {capabilities.map(({ name, icon: Icon }) => (
           <Button
             key={name}
@@ -59,7 +59,7 @@ export function CodeForge() {
               setActiveView(name);
               setInitialData(null);
             }}
-            className="capitalize rounded-md p-2 text-xs h-auto transition-all duration-300 ease-in-out shadow-sm hover:shadow-md flex-col"
+            className="capitalize rounded-md p-2 text-xs h-auto transition-all duration-300 ease-in-out shadow-sm hover:shadow-md flex-col w-20 h-20 flex-shrink-0"
           >
             <Icon className="w-5 h-5 mb-1" />
             {name}
