@@ -59,9 +59,9 @@ export function CodeForge() {
               setActiveView(name);
               setInitialData(null);
             }}
-            className="capitalize rounded-full px-3 text-xs h-7"
+            className="capitalize rounded-full px-2 text-[10px] h-6"
           >
-            <Icon className="w-4 h-4 mr-1" />
+            <Icon className="w-3 h-3 mr-1" />
             {name}
           </Button>
         ))}
