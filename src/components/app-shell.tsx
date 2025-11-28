@@ -3,7 +3,7 @@ import { WandSparkles } from 'lucide-react';
 export function AppShell({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex flex-col min-h-screen bg-background font-body">
-      <header className="sticky top-0 z-10 flex items-center h-14 px-4 md:px-6 bg-background">
+      <header className="sticky top-0 z-10 flex items-center h-12 px-4 md:px-6 bg-background">
         <div className="flex items-center gap-2">
           <div className="p-1.5 rounded-md bg-primary/20 text-primary">
             <WandSparkles className="w-5 h-5" />
