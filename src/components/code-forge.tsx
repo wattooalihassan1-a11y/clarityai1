@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Brain, BookMark, MessageSquareQuote, Combine, Sparkles } from 'lucide-react';
+import { Brain, Bookmark, MessageSquareQuote, Combine, Sparkles } from 'lucide-react';
 
 import Chat from '@/components/chat';
 import HomeworkHelper from '@/components/homework-helper';
@@ -14,7 +14,7 @@ import type { Capability } from '@/lib/types';
 
 const capabilities: { name: Capability; icon: React.ElementType }[] = [
   { name: 'Solve', icon: Sparkles },
-  { name: 'Study', icon: BookMark },
+  { name: 'Study', icon: Bookmark },
   { name: 'Explain', icon: MessageSquareQuote },
   { name: 'Summarize', icon: Combine },
   { name: 'Get Idea', icon: Brain },
