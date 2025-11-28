@@ -1,13 +1,11 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from 'react';
-import { Paperclip, Mic, Send, X } from 'lucide-react';
+import { Paperclip, Mic, Send, X, Settings, Sparkles } from 'lucide-react';
 import Image from 'next/image';
 import { useChatHistory } from '@/hooks/use-chat-history';
 import { handleChatConversation, generatePicture } from '@/app/actions';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import { useToast } from '@/hooks/use-toast';
 import { ChatSettings } from '@/components/chat-settings';
 import { MarkdownRenderer } from './markdown-renderer';
@@ -151,40 +149,27 @@ export default function Chat({ onSwitchView }: ChatProps) {
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-10rem)] shadow-none border-0 bg-background rounded-2xl">
+    <div className="flex flex-col h-[calc(100vh-10rem)] shadow-lg border bg-card rounded-2xl">
       <header className="flex items-center justify-between p-4 border-b">
           <div className="flex items-center gap-3">
-            <Avatar>
-              <AvatarImage src="/clarity-ai-logo.svg" alt="Clarity AI" />
-              <AvatarFallback>AI</AvatarFallback>
-            </Avatar>
+            <Sparkles className="w-6 h-6 text-primary" />
             <h2 className="text-lg font-semibold font-headline">Chat with AI</h2>
           </div>
           <ChatSettings />
       </header>
-      <div className="flex-1 p-4 overflow-y-auto">
+      <div ref={scrollAreaRef} className="flex-1 p-4 overflow-y-auto">
         <div className="space-y-6">
           {!isLoaded && <p className="text-center text-muted-foreground">Loading chat...</p>}
           {isLoaded && (!activeChat || activeChat.messages.length === 0) && (
               <div className="flex items-start gap-3">
-              <Avatar>
-                <AvatarImage src="/clarity-ai-logo.svg" alt="Clarity AI" />
-                <AvatarFallback>AI</AvatarFallback>
-              </Avatar>
               <div className="p-4 rounded-lg bg-muted max-w-md">
-                <p className="text-sm">Hello! I am Clarity AI, your intelligent, multi-purpose AI assistant. How can I help you today?</p>
+                <p className="text-sm">Hello! How can I help you today?</p>
               </div>
             </div>
           )}
           {activeChat?.messages.map((message, index) => (
             <div key={index} className={`flex items-start gap-3 ${message.role === 'user' ? 'justify-end' : ''}`}>
-                {message.role === 'assistant' && (
-                  <Avatar>
-                    <AvatarImage src="/clarity-ai-logo.svg" alt="Clarity AI" />
-                    <AvatarFallback>AI</AvatarFallback>
-                  </Avatar>
-                )}
-              <div className={`p-4 rounded-lg max-w-md ${message.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-muted'}`}>
+              <div className={`p-3 rounded-lg max-w-md ${message.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-muted'}`}>
                   {message.imageUrl && (
                     <div className="mb-2">
                       <Image src={message.imageUrl} alt="Uploaded content" width={300} height={300} className="rounded-md" />
@@ -196,10 +181,6 @@ export default function Chat({ onSwitchView }: ChatProps) {
           ))}
           {isSending && (
               <div className="flex items-start gap-3">
-                <Avatar>
-                    <AvatarImage src="/clarity-ai-logo.svg" alt="Clarity AI" />
-                    <AvatarFallback>AI</AvatarFallback>
-                  </Avatar>
                 <div className="p-4 rounded-lg bg-muted">
                   <div className="flex items-center gap-2">
                     <div className="w-2 h-2 rounded-full bg-muted-foreground animate-pulse delay-0"></div>
@@ -212,7 +193,7 @@ export default function Chat({ onSwitchView }: ChatProps) {
         </div>
       </div>
 
-      <div className="p-4 border-t">
+      <div className="p-4 border-t bg-background rounded-b-2xl">
         {image && (
           <div className="relative mb-2 w-fit">
             <Image src={image} alt="Preview" width={80} height={80} className="rounded-md" />
@@ -226,16 +207,12 @@ export default function Chat({ onSwitchView }: ChatProps) {
           <VoiceInput onStopRecording={setIsRecording} onSubmit={handleVoiceSubmit} />
         ) : (
           <div className="relative">
-            <div className="absolute left-3 top-1/2 -translate-y-1/2">
-                <input type="file" ref={fileInputRef} onChange={handleImageUpload} accept="image/*" className="hidden" />
-                <Button variant="ghost" size="icon" onClick={() => fileInputRef.current?.click()}><Paperclip className="w-5 h-5 text-muted-foreground" /></Button>
-            </div>
             <textarea
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder="Message Clarity AI..."
-              className="w-full resize-none rounded-full border bg-muted py-3 pl-12 pr-24"
+              className="w-full resize-none rounded-full border bg-muted py-3 pl-12 pr-28"
               rows={1}
               onInput={(e) => {
                 const target = e.target as HTMLTextAreaElement;
@@ -244,7 +221,9 @@ export default function Chat({ onSwitchView }: ChatProps) {
               }}
             />
             <div className="absolute flex items-center gap-1 right-2 top-1/2 -translate-y-1/2">
-              <Button variant="ghost" size="icon" onClick={() => setIsRecording(true)}><Mic className="w-5 h-5 text-muted-foreground" /></Button>
+              <input type="file" ref={fileInputRef} onChange={handleImageUpload} accept="image/*" className="hidden" />
+              <Button variant="ghost" size="icon" className="rounded-full" onClick={() => fileInputRef.current?.click()}><Paperclip className="w-5 h-5 text-muted-foreground" /></Button>
+              <Button variant="ghost" size="icon" className="rounded-full" onClick={() => setIsRecording(true)}><Mic className="w-5 h-5 text-muted-foreground" /></Button>
               <Button onClick={handleSendMessage} disabled={isSending} size="icon" className="rounded-full w-9 h-9 bg-primary text-primary-foreground hover:bg-primary/90"><Send className="w-5 h-5" /></Button>
             </div>
           </div>

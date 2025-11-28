@@ -56,9 +56,9 @@ export function CodeForge() {
             variant={activeView === name ? 'default' : 'outline'}
             onClick={() => {
               setActiveView(name);
-              setInitialData(null); // Clear initial data when manually switching tabs
+              setInitialData(null);
             }}
-            className="capitalize rounded-full px-5"
+            className="capitalize rounded-lg px-5"
           >
             <Icon className="w-4 h-4 mr-2" />
             {name}
