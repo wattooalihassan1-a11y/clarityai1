@@ -170,10 +170,13 @@ export default function Chat({ onSwitchView }: ChatProps) {
   };
 
   const handleCopy = (content: string) => {
-    navigator.clipboard.writeText(content);
-    toast({ title: "Copied to clipboard!" });
+    navigator.clipboard.writeText(content).then(() => {
+      toast({ title: "Copied to clipboard!" });
+    }, (err) => {
+      console.error('Could not copy text: ', err);
+      toast({ title: "Failed to copy", variant: "destructive" });
+    });
   };
-
 
   return (
     <div className="flex flex-col h-full bg-card rounded-2xl overflow-hidden">
