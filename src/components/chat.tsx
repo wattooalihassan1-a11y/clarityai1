@@ -57,8 +57,8 @@ export default function Chat({ onSwitchView }: ChatProps) {
 
   const processSlashCommand = (command: string, args: string) => {
     switch (command) {
-      case '/study':
-        onSwitchView('Study', { question: args });
+      case '/tutor':
+        onSwitchView('Tutor', { question: args });
         return true;
       case '/explain':
         onSwitchView('Explain', { topic: args });
