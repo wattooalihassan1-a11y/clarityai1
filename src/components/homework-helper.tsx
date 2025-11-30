@@ -20,7 +20,7 @@ export default function HomeworkHelper({ initialData, setInitialData }: Homework
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
-  const performSubmit = useCallback(async (currentQuestion: string) => {
+  const handleSubmit = useCallback(async (currentQuestion: string) => {
     if (!currentQuestion.trim()) return;
 
     setIsLoading(true);
@@ -41,24 +41,24 @@ export default function HomeworkHelper({ initialData, setInitialData }: Homework
     }
   }, [toast]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    performSubmit(question);
+    handleSubmit(question);
   };
 
   useEffect(() => {
     if (initialData?.question) {
       const initialQuestion = initialData.question;
       setQuestion(initialQuestion);
-      performSubmit(initialQuestion);
+      handleSubmit(initialQuestion);
       setInitialData(null); // Consume the initial data
     }
-  }, [initialData, setInitialData, performSubmit]);
+  }, [initialData, setInitialData, handleSubmit]);
 
 
   return (
     <div className="space-y-6">
-      <form onSubmit={handleSubmit} className="flex gap-2">
+      <form onSubmit={handleFormSubmit} className="flex gap-2">
         <Input
           value={question}
           onChange={(e) => setQuestion(e.target.value)}
