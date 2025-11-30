@@ -45,7 +45,7 @@ export default function HomeworkHelper({ initialData, setInitialData }: Homework
     e.preventDefault();
     handleSubmit(question);
   };
-
+  
   useEffect(() => {
     if (initialData?.question) {
       const initialQuestion = initialData.question;

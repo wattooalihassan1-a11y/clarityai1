@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -19,15 +19,14 @@ export default function Explain({ initialData, setInitialData }: ExplainProps) {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
-  const handleSubmit = async (e?: React.FormEvent) => {
-    e?.preventDefault();
-    if (!topic.trim()) return;
+  const handleSubmit = useCallback(async (currentTopic: string) => {
+    if (!currentTopic.trim()) return;
 
     setIsLoading(true);
     setResult(null);
 
     try {
-      const res = await explainTopic({ topic });
+      const res = await explainTopic({ topic: currentTopic });
       setResult(res);
     } catch (error) {
       console.error(error);
@@ -39,20 +38,26 @@ export default function Explain({ initialData, setInitialData }: ExplainProps) {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [toast]);
+
+  const handleFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    handleSubmit(topic);
+  }
 
   useEffect(() => {
     if (initialData?.topic) {
-      setTopic(initialData.topic);
-      handleSubmit();
+      const initialTopic = initialData.topic;
+      setTopic(initialTopic);
+      handleSubmit(initialTopic);
       setInitialData(null);
     }
-  }, [initialData, setInitialData]);
+  }, [initialData, setInitialData, handleSubmit]);
 
 
   return (
     <div className="space-y-6">
-      <form onSubmit={handleSubmit} className="flex gap-2">
+      <form onSubmit={handleFormSubmit} className="flex gap-2">
         <Input
           value={topic}
           onChange={(e) => setTopic(e.target.value)}
