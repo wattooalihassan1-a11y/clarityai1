@@ -9,14 +9,14 @@ import { useToast } from '@/hooks/use-toast';
 import type { StudyBuddyOutput } from '@/ai/flows/study-buddy';
 import { ArrowLeft, ArrowRight, RefreshCw } from 'lucide-react';
 
-interface StudyBuddyProps {
+interface QGenProps {
   initialData: { topic: string } | null;
   setInitialData: (data: any) => void;
 }
 
 type Flashcard = StudyBuddyOutput['flashcards'][0];
 
-export default function StudyBuddy({ initialData, setInitialData }: StudyBuddyProps) {
+export default function QGen({ initialData, setInitialData }: QGenProps) {
   const [topic, setTopic] = useState('');
   const [flashcards, setFlashcards] = useState<Flashcard[]>([]);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
@@ -93,20 +93,20 @@ export default function StudyBuddy({ initialData, setInitialData }: StudyBuddyPr
           disabled={isLoading}
         />
         <Button type="submit" disabled={isLoading}>
-          {isLoading ? 'Generating...' : 'Create Flashcards'}
+          {isLoading ? 'Generating...' : 'Generate Questions'}
         </Button>
       </form>
 
       <div className="flex-1 flex flex-col items-center justify-center">
         {isLoading && (
           <div className="w-full max-w-md h-64 bg-muted rounded-lg flex items-center justify-center animate-pulse">
-            <p className="text-muted-foreground">Generating flashcards...</p>
+            <p className="text-muted-foreground">Generating questions...</p>
           </div>
         )}
 
         {!isLoading && flashcards.length === 0 && (
           <div className="text-center text-muted-foreground">
-            <p>Enter a topic to start your study session.</p>
+            <p>Enter a topic to generate questions.</p>
           </div>
         )}
 

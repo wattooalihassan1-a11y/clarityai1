@@ -10,13 +10,13 @@ import HomeworkHelper from '@/components/homework-helper';
 import Explain from '@/components/explain';
 import Summarize from '@/components/summarize';
 import GetIdea from '@/components/get-idea';
-import StudyBuddy from '@/components/study-buddy';
+import QGen from '@/components/q-gen';
 
 import type { Capability } from '@/lib/types';
 
 const capabilities: { name: Capability; icon: React.ElementType }[] = [
   { name: 'Solve', icon: Sparkles },
-  { name: 'Study', icon: BrainCircuit },
+  { name: 'Q-Gen', icon: BrainCircuit },
   { name: 'Explain', icon: MessageSquareQuote },
   { name: 'Summarize', icon: Combine },
   { name: 'Get Idea', icon: Lightbulb },
@@ -36,8 +36,8 @@ export function CodeForge() {
     switch (activeView) {
       case 'Solve':
         return <Chat onSwitchView={switchView} />;
-      case 'Study':
-        return <StudyBuddy {...props} />;
+      case 'Q-Gen':
+        return <QGen {...props} />;
       case 'Explain':
         return <Explain {...props} />;
       case 'Summarize':
