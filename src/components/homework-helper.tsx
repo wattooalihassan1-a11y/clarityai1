@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -20,15 +20,14 @@ export default function HomeworkHelper({ initialData, setInitialData }: Homework
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
-  const handleSubmit = async (e?: React.FormEvent) => {
-    e?.preventDefault();
-    if (!question.trim()) return;
+  const performSubmit = useCallback(async (currentQuestion: string) => {
+    if (!currentQuestion.trim()) return;
 
     setIsLoading(true);
     setResult(null);
 
     try {
-      const res = await homeworkHelper(question);
+      const res = await homeworkHelper(currentQuestion);
       setResult(res);
     } catch (error) {
       console.error(error);
@@ -40,15 +39,21 @@ export default function HomeworkHelper({ initialData, setInitialData }: Homework
     } finally {
       setIsLoading(false);
     }
+  }, [toast]);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    performSubmit(question);
   };
 
   useEffect(() => {
     if (initialData?.question) {
-      setQuestion(initialData.question);
-      handleSubmit();
+      const initialQuestion = initialData.question;
+      setQuestion(initialQuestion);
+      performSubmit(initialQuestion);
       setInitialData(null); // Consume the initial data
     }
-  }, [initialData, setInitialData]);
+  }, [initialData, setInitialData, performSubmit]);
 
 
   return (
