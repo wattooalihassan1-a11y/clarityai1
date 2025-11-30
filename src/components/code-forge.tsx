@@ -2,19 +2,20 @@
 
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { MessageSquareQuote, Combine, Sparkles, Image, Lightbulb } from 'lucide-react';
+import { MessageSquareQuote, Combine, Sparkles, Image, Lightbulb, BrainCircuit } from 'lucide-react';
 
 import Chat from '@/components/chat';
 import HomeworkHelper from '@/components/homework-helper';
 import Explain from '@/components/explain';
 import Summarize from '@/components/summarize';
 import GetIdea from '@/components/get-idea';
+import StudyBuddy from '@/components/study-buddy';
 
 import type { Capability } from '@/lib/types';
 
 const capabilities: { name: Capability; icon: React.ElementType }[] = [
   { name: 'Solve', icon: Sparkles },
-  { name: 'Tutor', icon: MessageSquareQuote },
+  { name: 'Study Buddy', icon: BrainCircuit },
   { name: 'Explain', icon: MessageSquareQuote },
   { name: 'Summarize', icon: Combine },
   { name: 'Get Idea', icon: Lightbulb },
@@ -34,8 +35,8 @@ export function CodeForge() {
     switch (activeView) {
       case 'Solve':
         return <Chat onSwitchView={switchView} />;
-      case 'Tutor':
-        return <HomeworkHelper {...props} />;
+      case 'Study Buddy':
+        return <StudyBuddy {...props} />;
       case 'Explain':
         return <Explain {...props} />;
       case 'Summarize':

@@ -7,3 +7,4 @@ import '@/ai/flows/maintain-conversation-context.ts';
 import '@/ai/flows/summarize-text.ts';
 import '@/ai/flows/generate-picture.ts';
 import '@/ai/flows/explain-topic.ts';
+import '@/ai/flows/study-buddy.ts';
