@@ -40,11 +40,6 @@ export default function HomeworkHelper({ initialData, setInitialData }: Homework
       setIsLoading(false);
     }
   }, [toast]);
-
-  const handleFormSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    handleSubmit(question);
-  };
   
   useEffect(() => {
     if (initialData?.question) {
@@ -58,7 +53,7 @@ export default function HomeworkHelper({ initialData, setInitialData }: Homework
 
   return (
     <div className="space-y-6">
-      <form onSubmit={handleFormSubmit} className="flex gap-2">
+      <form onSubmit={(e) => { e.preventDefault(); handleSubmit(question); }} className="flex gap-2">
         <Input
           value={question}
           onChange={(e) => setQuestion(e.target.value)}
