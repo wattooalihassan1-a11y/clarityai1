@@ -17,5 +17,5 @@ export type NewMessage = {
     language: string;
   };
   
-  export type Capability = 'Solve' | 'Flashcards' | 'Explain' | 'Summarize' | 'Get Idea';
+  export type Capability = 'Solve' | 'Study' | 'Explain' | 'Summarize' | 'Get Idea';
   
