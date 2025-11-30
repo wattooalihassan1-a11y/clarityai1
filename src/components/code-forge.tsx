@@ -15,7 +15,7 @@ import type { Capability } from '@/lib/types';
 
 const capabilities: { name: Capability; icon: React.ElementType }[] = [
   { name: 'Solve', icon: Sparkles },
-  { name: 'Study Buddy', icon: BrainCircuit },
+  { name: 'Flashcards', icon: BrainCircuit },
   { name: 'Explain', icon: MessageSquareQuote },
   { name: 'Summarize', icon: Combine },
   { name: 'Get Idea', icon: Lightbulb },
@@ -35,7 +35,7 @@ export function CodeForge() {
     switch (activeView) {
       case 'Solve':
         return <Chat onSwitchView={switchView} />;
-      case 'Study Buddy':
+      case 'Flashcards':
         return <StudyBuddy {...props} />;
       case 'Explain':
         return <Explain {...props} />;

@@ -9,7 +9,7 @@ export type NewMessage = {
   };
   
   export type Chat = {
-    id: string;
+    id:string;
     title: string;
     createdAt: string;
     messages: Message[];
@@ -17,5 +17,5 @@ export type NewMessage = {
     language: string;
   };
   
-  export type Capability = 'Solve' | 'Study Buddy' | 'Explain' | 'Summarize' | 'Get Idea';
+  export type Capability = 'Solve' | 'Flashcards' | 'Explain' | 'Summarize' | 'Get Idea';
   
